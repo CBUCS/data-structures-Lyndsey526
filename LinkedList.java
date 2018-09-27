@@ -13,14 +13,39 @@ public class LinkedList<T> implements List<T>
     }
 
     private Node<T> head, tail;
-//constructur for a new linked list object
 
+    //constructur for a new linked list object
     public LinkedList()
     {
         head = null;
         tail = null;
     }
-//insert item into link list at first position
+
+    public void add(T item)
+    {
+        insertFirst(item);
+    }
+
+    public void add(int pos, T item)
+    {
+        if(pos < size()) {
+            Node<T> ptr = head;
+            for (int i = 0; i < pos; i++)
+                ptr = ptr.link;
+            Node<T> newNode = new Node<>();
+            newNode.value = item;
+            if(ptr == head) {
+                newNode.link = head;
+                head = newNode;
+            }
+            else {
+                newNode.link = ptr.link;
+                ptr.link = newNode;
+            }
+        }
+    }
+
+    //insert item into link list at first position
     public void insertFirst(T item)
     {
         if(head == null)
@@ -38,7 +63,8 @@ public class LinkedList<T> implements List<T>
             head = newNode;
         }
     }
-//insert item into link list at last position
+
+    //insert item into link list at last position
     public void insertLast(T item)
     {
         if(tail == null)
@@ -57,40 +83,42 @@ public class LinkedList<T> implements List<T>
             tail = newNode;
         }
     }
-//removes the first item in the linked list and returns it
+
+    //removes the first item in the linked list and returns it
     public T removeFirst()
     {
         if(head == null)
             return null;
         else if(head == tail)
         {
-            T value = (T)head.value;
+            T value = head.value;
             head = null;
             tail = null;
             return value;
         }
         else
         {
-            T value = (T)head.value;
+            T value = head.value;
             head = head.link;
             return value;
         }
     }
-//removes the last item in the linked list and returns it
+
+    //removes the last item in the linked list and returns it
     public T removeLast()
     {
         if(tail == null)
             return null;
         else if(head == tail)
         {
-            T value = (T)head.value;
+            T value = head.value;
             head = null;
             tail = null;
             return value;
         }
         else
         {
-            T value = (T)tail.value;
+            T value = tail.value;
             Node ptr = head;
             while(ptr.link != tail)
                 ptr = ptr.link;
@@ -99,10 +127,11 @@ public class LinkedList<T> implements List<T>
             return value;
         }
     }
-//delete item from list if it exits
+
+    //delete item from list if it exits
     public void deleteItem(T item)
     {
-        Node ptr = head, before = null;
+        Node<T> ptr = head, before = null;
         while(ptr != null && ptr.value != item) {
             before = ptr;
             ptr = ptr.link;
@@ -118,10 +147,74 @@ public class LinkedList<T> implements List<T>
                 tail = before;
         }
     }
-//find item in the list returns true if is true
-    public boolean find(T item)
+
+    //replace item from list
+    public void replaceItem(int pos, T item)
     {
-        Node ptr = head;
+        if(pos >= size())
+            return;
+        else
+        {
+            Node<T> ptr = head;
+            for(int i = 0; i < pos; i++)
+                ptr = ptr.link;
+            ptr.value = item;
+        }
+    }
+
+    public void clear()
+    {
+        while(size() > 0)
+            removeFirst();
+    }
+
+    public T remove()
+    {
+        return removeFirst();
+    }
+
+    public T remove(int pos)
+    {
+        if(pos < size()) {
+            if(pos == 0)
+                return removeFirst();
+            else {
+                Node<T> ptr = head, before = null;
+                for (int i = 0; i < pos; i++) {
+                    before = ptr;
+                    ptr = ptr.link;
+                }
+                before.link = ptr.link;
+                ptr.link = null;
+                return ptr.value;
+            }
+        }
+        return null;
+    }
+
+    public boolean remove(T item)
+    {
+        if(contains(item)) {
+            Node<T> ptr = head, before = null;
+            while(ptr.value != item) {
+                before = ptr;
+                ptr = ptr.link;
+            }
+            if(before == null)
+                removeFirst();
+            else {
+                before.link = ptr.link;
+                ptr.link = null;
+            }
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public boolean contains(T item)
+    {
+        Node<T> ptr = head;
         while(ptr != null) {
             if(ptr.value == item)
                 return true;
@@ -129,43 +222,46 @@ public class LinkedList<T> implements List<T>
         }
         return false;
     }
-//get the first item in linked list
+
+    //get first item in linked list
     public T getFirst()
     {
         if(head == null)
             return null;
         else
-            return (T)head.value;
+            return head.value;
     }
-//get last item in linked list
+
+    //get last item in linked list
     public T getLast()
     {
         if(tail == null)
             return null;
         else
-            return (T)tail.value;
+            return tail.value;
     }
-//get's that item at the sepcific postion if it exists
-    public T getItemAt(int pos)
+
+    //get's that item at the sepcific postion if it exists
+    public T get(int pos)
     {
         if(pos >= size())
             return null;
-
-        Node ptr = head;
+        Node<T> ptr = head;
         for(int i = 0; i < pos; i++)
             ptr = ptr.link;
-
-        return (T)ptr.value;
+        return ptr.value;
     }
-//checking to see if anything is in the list
+
+    //checking to see if anything is in the list
     public boolean isEmpty()
     {
         return (head == null);
     }
-//return number of elmenents in list
+
+    //return number of elmenents in list
     public int size()
     {
-        Node ptr = head;
+        Node<T> ptr = head;
         int count = 0;
         while(ptr != null)
         {
@@ -174,17 +270,15 @@ public class LinkedList<T> implements List<T>
         }
         return count;
     }
-//replace that item at soecific postion with new item
-    public void replaceItem(int pos, T item)
+
+    public T set(int pos, T item)
     {
-        if(pos >= size())
-            return;
-        else
-        {
-            Node ptr = head;
-            for(int i = 0; i < pos; i++)
-                ptr = ptr.link;
-            ptr.value = item;
+        T prevVal = get(pos);
+        if(prevVal == null)
+            return null;
+        else {
+            replaceItem(pos, item);
+            return prevVal;
         }
     }
 }

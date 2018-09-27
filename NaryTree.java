@@ -40,15 +40,16 @@ public class NaryTree<T> implements Tree<T>
             }
             for(int i = 0; i < N; i++)
             {
-                if(node.children.getItemAt(i) == null) {
+                if(node.children.get(i) == null) {
                     node.children.replaceItem(i, newNode);
                     return;
                 }
             }
             for(int i = 0; i < N; i++)
-                queue.enqueue(node.children.getItemAt(i));
+                queue.enqueue(node.children.get(i));
         }
     }
+
     //removes item from tree and replaces with the bottom right most element
     public void remove(T item)
     {
@@ -60,10 +61,10 @@ public class NaryTree<T> implements Tree<T>
 
             while(start < list.size())
             {
-                TreeNode<T> t = list.getItemAt(start);
+                TreeNode<T> t = list.get(start);
                 for(int i = 0; i < N; i++) {
-                    if (t.children.getItemAt(i) != null)
-                        list.insertLast(t.children.getItemAt(i));
+                    if (t.children.get(i) != null)
+                        list.insertLast(t.children.get(i));
                 }
                 start++;
             }
@@ -71,8 +72,8 @@ public class NaryTree<T> implements Tree<T>
             int childNo = 0;
             for(int i = 0; i < list.size(); i++) {
                 for(int j = 0; j < N; j++) {
-                    if (list.getItemAt(i).children.getItemAt(j) == list.getLast()) {
-                        parent = list.getItemAt(i);
+                    if (list.get(i).children.get(j) == list.getLast()) {
+                        parent = list.get(i);
                         childNo = j;
                     }
                 }
@@ -86,24 +87,25 @@ public class NaryTree<T> implements Tree<T>
             }
         }
     }
-//printout preordered version of the tree
+    //printout preordered version of the tree
     public void traversal()
     {
         System.out.print("Nary Tree: ");
         traversalHelper(root);
         System.out.println();
     }
-//helps the traversal function solve problem
+
+    //helps the traversal function solve problem
     private void traversalHelper(TreeNode<T> ptr)
     {
         if(ptr != null)
         {
             System.out.print(ptr.value + " ");
             for(int i = 0; i < N; i++)
-                traversalHelper(ptr.children.getItemAt(i));
+                traversalHelper(ptr.children.get(i));
         }
     }
-// find a specific tree node that contains item
+    // find a specific tree node that contains item
     private TreeNode<T> findNode(T item)
     {
         return findNodeHelper(root, item);
@@ -119,12 +121,13 @@ public class NaryTree<T> implements Tree<T>
             if(ptr.value == item)
                 return ptr;
             for(int i = 0; i < N; i++)
-                if ((t = findNodeHelper(ptr.children.getItemAt(i), item)) != null)
+                if ((t = findNodeHelper(ptr.children.get(i), item)) != null)
                     return t;
             return null;
         }
     }
-//check to see if the item exits in the tree
+
+    //check to see if the item exits in the tree
     public boolean find(T item)
     {
         return findHelper(root, item);
@@ -141,13 +144,14 @@ public class NaryTree<T> implements Tree<T>
             else {
                 boolean isFound = false;
                 for (int i = 0; i < N; i++) {
-                    isFound = isFound || findHelper(ptr.children.getItemAt(i), item);
+                    isFound = isFound || findHelper(ptr.children.get(i), item);
                 }
                 return isFound;
             }
         }
     }
-//get the height of the tree
+
+    //get the height of the tree
     public int height()
     {
         return heightHelper(root);
@@ -160,16 +164,52 @@ public class NaryTree<T> implements Tree<T>
         else {
             int height = -1;
             for(int i = 0; i < N; i++)
-                height = max(height, heightHelper(ptr.children.getItemAt(i)));
+                height = max(height, heightHelper(ptr.children.get(i)));
             return 1 + height;
         }
     }
-//largest number of two values
+
+    //largest number of two values
     private int max(int val1, int val2)
     {
         if(val1 > val2)
             return val1;
         else
             return val2;
+    }
+
+    //
+    public void dumpDFS()
+    {
+        System.out.print("DFS: ");
+        dumpDFSHelper(root);
+        System.out.println();
+    }
+
+    private void dumpDFSHelper(TreeNode<T> ptr)
+    {
+        if(ptr != null)
+        {
+            System.out.print(ptr.value + " ");
+            for(int i = 0; i < N; i++)
+                traversalHelper(ptr.children.get(i));
+        }
+    }
+    //start at the root
+    public void dumpBFS()
+    {
+        Queue<TreeNode<T>> queue = new Queue<>();
+        queue.enqueue(root);
+        System.out.print("BFS: ");
+        while(!queue.isEmpty())
+        {
+            TreeNode<T> node = queue.dequeue();
+            System.out.print(node.value + " ");
+            for(int i = 0; i < N; i++) {
+                if (node.children.get(i) != null)
+                    queue.enqueue(node.children.get(i));
+            }
+        }
+        System.out.println();
     }
 }

@@ -39,11 +39,11 @@ public class ADT_Test
         list.deleteItem(5);
         System.out.println(list.getFirst());
         System.out.println(list.getLast());
-        System.out.println(list.getItemAt(1));
-        System.out.println(list.getItemAt(2));
-        System.out.println(list.getItemAt(4));
-        System.out.println(list.find(3));
-        System.out.println(list.find(5) + "\n");
+        System.out.println(list.get(1));
+        System.out.println(list.get(2));
+        System.out.println(list.get(4));
+        System.out.println(list.contains(3));
+        System.out.println(list.contains(5) + "\n");
 
         BinaryTree<Integer> tree = new BinaryTree<>();
         BinaryTree<Integer> oneTree = new BinaryTree<>();
