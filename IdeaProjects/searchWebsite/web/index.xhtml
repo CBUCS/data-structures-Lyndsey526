@@ -1,0 +1,39 @@
+/*<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+*/
+
+<title>Search Engine</title>
+
+<script type="text/javascript">
+   function searchInput(str) {
+       var request=new XMLHttpRequest();
+       request.onreadystatechange=function()
+       (
+           if(request.readystate===4 && request.status==200)
+               (document.getElementById("results").innerHTML)=request.responseText;
+       )
+
+   }
+</script>
+
+      <body>
+      <div align="center">
+         search:</div>br>
+         <input type="text" onkeyup="searchInput(this.value)"/>
+      </div>I
+
+      <div align="center">
+         Results:
+         <p id="results">&nbsp</p>
+      </div>
+      </body>
+
+
+
+
+
